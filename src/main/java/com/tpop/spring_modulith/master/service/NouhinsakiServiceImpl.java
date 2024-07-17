@@ -1,6 +1,8 @@
 package com.tpop.spring_modulith.master.service;
 
+import com.tpop.spring_modulith.component.ApiResponse;
 import com.tpop.spring_modulith.constant.MessageCode;
+import com.tpop.spring_modulith.constant.ResponseStatusConst;
 import com.tpop.spring_modulith.event.Event;
 import com.tpop.spring_modulith.exception.APIErrorDetail;
 import com.tpop.spring_modulith.exception.CommonException;
@@ -24,28 +26,35 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class NouhinsakiServiceImpl implements GenericService<NouhinsakiMaster>{
 
     private final NouhisakiRepository nouhisakiRepository;
+
     private final MessageSource messageSource;
     @Override
     public Page<NouhinsakiMaster> findAll(Pageable pageable) throws CommonException {
         return null;
     }
 
-    public List<NouhinsakiMaster> getNouhisakiList() throws CommonException{
-        List<NouhinsakiMaster> resultList ;
+    public ApiResponse<Object> getNouhisakiList(Locale locale) throws CommonException {
+        ApiResponse<Object> response = new ApiResponse<>();
+        List<NouhinsakiMaster> resultList;
         try {
             resultList = nouhisakiRepository.findAll();
             if (CollectionUtils.isEmpty(resultList)) {
-                return Collections.emptyList();
+                response.setStatus(ResponseStatusConst.SUCCESS);
+                response.setMessage(messageSource.getMessage(MessageCode.NOT_EXISTS, null, locale));
+                response.setData(resultList);
+            } else {
+                response.setStatus(ResponseStatusConst.SUCCESS);
+                response.setMessage(null);
+                response.setData(resultList);
             }
         } catch (Exception e) {
-           throw new CommonException(
-                   MessageCode.INTERNAL_ERROR,
-                   e.getMessage(),
-                   HttpStatus.INTERNAL_SERVER_ERROR
-           );
+            throw new CommonException(
+                    MessageCode.INTERNAL_ERROR,
+                    e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
-
-        return resultList;
+        return response;
     }
 
     @Override

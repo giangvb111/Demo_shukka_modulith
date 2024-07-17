@@ -33,30 +33,6 @@ public class SettingDataService implements GenericService<SettingGeneralData>{
 
     private final ModelMapper modelMapper;
 
-    public ModelAndView initSetting(ModelAndView mav , HttpServletRequest request , Locale locale) throws CommonException {
-        mav.setViewName("screenName");
-        try {
-            Integer screenId = settingDataRepository.getScreenIdByUrl(request.getRequestURI());
-            if (Objects.isNull(screenId)) {
-                throw new CommonException()
-                        .setErrorCode(MessageCode.DATA_NOT_FOUND)
-                        .setMessage(messageSource.getMessage(MessageCode.DATA_NOT_FOUND, null, locale))
-                        .setStatusCode(HttpStatus.BAD_REQUEST);
-            }
-
-            mav.addObject("screenOption", settingDataRepository.screenOptionList(screenId));
-        }catch (CommonException e){
-            throw e;
-        } catch (Exception e) {
-            throw new CommonException(
-                    MessageCode.INTERNAL_ERROR ,
-                    e.getMessage() ,
-                    HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
-        return mav ;
-    }
-
     public Integer getScreenIdByScreenCode (String screenCode) {
         return settingDataRepository.getScreenIdByScreenCode(screenCode);
     }

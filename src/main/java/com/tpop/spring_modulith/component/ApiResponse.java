@@ -1,9 +1,7 @@
 package com.tpop.spring_modulith.component;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.tpop.spring_modulith.exception.CommonException;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
@@ -12,17 +10,9 @@ import java.io.Serializable;
 public class ApiResponse<T> implements Serializable {
     private Integer status;
     private String message;
-    private HttpStatus httpStatus = HttpStatus.OK;
     private T data;
 
     public ApiResponse() {
-    }
-
-    public ApiResponse(Integer status, String message , T data , HttpStatus httpStatus) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-        this.httpStatus = httpStatus;
     }
 
     public ApiResponse(Integer status, String message , T data) {
@@ -30,7 +20,6 @@ public class ApiResponse<T> implements Serializable {
         this.message = message;
         this.data = data;
     }
-
     public ApiResponse<T> setStatus(Integer status) {
         this.status = status;
         return this;
@@ -38,11 +27,6 @@ public class ApiResponse<T> implements Serializable {
 
     public ApiResponse<T> setMessage(String message) {
         this.message = message;
-        return this;
-    }
-
-    public ApiResponse<T> setHttpStatus(HttpStatus httpStatus) {
-        this.httpStatus = httpStatus;
         return this;
     }
 

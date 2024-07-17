@@ -1,5 +1,6 @@
 package com.tpop.spring_modulith.master.controller;
 
+import com.tpop.spring_modulith.component.ApiResponse;
 import com.tpop.spring_modulith.exception.CommonException;
 import com.tpop.spring_modulith.master.entities.NouhinsakiMaster;
 import com.tpop.spring_modulith.master.service.NouhinsakiServiceImpl;
@@ -18,8 +19,8 @@ public class NouhinsakiController {
     private final NouhinsakiServiceImpl nouhinsakiService;
 
     @GetMapping(value = "/get-list")
-    public ResponseEntity<List<NouhinsakiMaster>> getNouhinsakiList() throws CommonException {
-        return ResponseEntity.ok(nouhinsakiService.getNouhisakiList());
+    public ResponseEntity<ApiResponse<Object>> getNouhinsakiList(Locale locale) throws CommonException {
+        return ResponseEntity.ok(nouhinsakiService.getNouhisakiList(locale));
     }
 
     @PostMapping(value = "/create")

@@ -4,7 +4,6 @@ import com.tpop.spring_modulith.constant.MessageCode;
 import com.tpop.spring_modulith.event.Event;
 import com.tpop.spring_modulith.exception.APIErrorDetail;
 import com.tpop.spring_modulith.exception.CommonException;
-import com.tpop.spring_modulith.master.entities.NouhinsakiMaster;
 import com.tpop.spring_modulith.master.entities.SeihinMaster;
 import com.tpop.spring_modulith.master.repository.SeihinRepository;
 import lombok.RequiredArgsConstructor;

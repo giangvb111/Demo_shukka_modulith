@@ -1,6 +1,8 @@
 package com.tpop.spring_modulith.master.service;
 
+import com.tpop.spring_modulith.component.ApiResponse;
 import com.tpop.spring_modulith.constant.MessageCode;
+import com.tpop.spring_modulith.constant.ResponseStatusConst;
 import com.tpop.spring_modulith.event.Event;
 import com.tpop.spring_modulith.exception.APIErrorDetail;
 import com.tpop.spring_modulith.exception.CommonException;
@@ -33,12 +35,17 @@ public class TantoshaServiceImpl implements GenericService<Tantosha>{
         return null;
     }
 
-    public List<Tantosha> getTantoshaListByTaishokuFlg(Integer taishokuFlg) {
+    public ApiResponse<Object> getTantoshaListByTaishokuFlg(Integer taishokuFlg, Locale locale) {
+        ApiResponse<Object> response = new ApiResponse<>();
         List<Tantosha> tantoshaList = tantoshaRepository.findTantoshaByTaishokuFlg(taishokuFlg);
         if (CollectionUtils.isEmpty(tantoshaList)) {
-            return Collections.emptyList();
+            response.setMessage(messageSource.getMessage(MessageCode.NOT_EXISTS, null, locale));
+        } else {
+            response.setMessage(null);
         }
-        return tantoshaList;
+        response.setData(tantoshaList);
+        response.setStatus(ResponseStatusConst.SUCCESS);
+        return response;
     }
 
     @Override

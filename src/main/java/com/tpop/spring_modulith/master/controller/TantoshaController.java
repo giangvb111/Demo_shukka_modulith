@@ -1,5 +1,6 @@
 package com.tpop.spring_modulith.master.controller;
 
+import com.tpop.spring_modulith.component.ApiResponse;
 import com.tpop.spring_modulith.exception.CommonException;
 import com.tpop.spring_modulith.master.entities.Tantosha;
 import com.tpop.spring_modulith.master.service.TantoshaServiceImpl;
@@ -18,8 +19,8 @@ public class TantoshaController {
     private final TantoshaServiceImpl tantoshaService;
 
     @GetMapping(value = "/get-tantosha-by-taishoku-flg")
-    public ResponseEntity<List<Tantosha>> getTantoshaByTaishokuFlg(@RequestParam("taishokuFlg") Integer taishokuFlg) {
-        return ResponseEntity.ok(tantoshaService.getTantoshaListByTaishokuFlg(taishokuFlg));
+    public ResponseEntity<ApiResponse<Object>> getTantoshaByTaishokuFlg(@RequestParam("taishokuFlg") Integer taishokuFlg , Locale locale) {
+        return ResponseEntity.ok(tantoshaService.getTantoshaListByTaishokuFlg(taishokuFlg , locale));
     }
 
     @PostMapping(value = "/create")
