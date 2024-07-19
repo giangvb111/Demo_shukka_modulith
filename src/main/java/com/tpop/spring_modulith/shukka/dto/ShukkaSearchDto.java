@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ShukkaSearchDto {
-
     private String shukkaYoteiBiFrom;
     private String shukkaYoteiBiTo;
     private String shukkaJisseikiBiFrom;

@@ -9,6 +9,7 @@ import com.tpop.spring_modulith.event.EventType;
 import com.tpop.spring_modulith.exception.APIErrorDetail;
 import com.tpop.spring_modulith.exception.CommonException;
 import com.tpop.spring_modulith.master.dto.SettingDataDtoImpl;
+import com.tpop.spring_modulith.master.dto.SettingDataDtos;
 import com.tpop.spring_modulith.shukka.dto.ShukkaDto;
 import com.tpop.spring_modulith.shukka.dto.ShukkaSearchDto;
 import com.tpop.spring_modulith.shukka.entities.ShukkaHeader;
@@ -19,7 +20,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,14 +57,19 @@ public class ShukkaHeaderServiceImpl implements GenericService{
         return null;
     }
 
+    @Override
+    public ShukkaDto save(ShukkaDto shukkaDto, Locale locale) throws CommonException, ExecutionException, InterruptedException {
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     public List<SettingDataDtoImpl> getSettingDataList(Integer screenId) throws ExecutionException, InterruptedException {
-        CompletableFuture<Object> future ;
-       future = eventPublisher.publishCustomEvent(EventType.TYPE_SETTINGDATA , null ,screenId);
+        CompletableFuture<Object> future;
+        future = eventPublisher.publishCustomEvent(EventType.TYPE_SETTINGDATA, null, screenId);
         Object result = future.get();
         if (result instanceof List<?> resultList && !resultList.isEmpty() && resultList.get(0) instanceof SettingDataDtoImpl) {
-                return (List<SettingDataDtoImpl>) resultList;
-            }
+            return (List<SettingDataDtoImpl>) resultList;
+        }
         return Collections.emptyList();
     }
 
@@ -75,27 +81,45 @@ public class ShukkaHeaderServiceImpl implements GenericService{
      * @throws CommonException
      */
     public ApiResponse<Object> getAllShukkaList(ShukkaSearchDto param, Locale locale) throws CommonException {
-        List<Map<String, Object>> resultList;
+        List<Map<String, Object>> resultList = new ArrayList<>();
         ApiResponse<Object> responseData = new ApiResponse<>();
         try {
             Integer screenId = getScreenId();
-            resultList = shukkaHeaderRepository.getAllShukkaList(
-                    screenId,
-                    param.getShukkaYoteiBiFrom(),
-                    param.getShukkaYoteiBiTo(),
-                    param.getShukkaJisseikiBiFrom(),
-                    param.getShukkaJisseikiBiTo(),
-                    param.getJyuchuBiFrom(),
-                    param.getJyuchuBiTo(),
-                    param.getNouhinsakiList(),
-                    param.getSeikyuusaki(),
-                    param.getTantoshaList(),
-                    param.getShukkaSoukoList(),
-                    param.getShukkaTanabanList(),
-                    param.getSeihinCodeList(),
-                    param.getSeihinMeiList(),
-                    param.getKeywordList()
-            );
+            List<Map<String, Object>> dataMap =
+                    shukkaHeaderRepository.getAllShukkaList(
+                            screenId,
+                            param.getShukkaYoteiBiFrom(),
+                            param.getShukkaYoteiBiTo(),
+                            param.getShukkaJisseikiBiFrom(),
+                            param.getShukkaJisseikiBiTo(),
+                            param.getJyuchuBiFrom(),
+                            param.getJyuchuBiTo(),
+                            param.getNouhinsakiList(),
+                            param.getSeikyuusaki(),
+                            param.getTantoshaList(),
+                            param.getShukkaSoukoList(),
+                            param.getShukkaTanabanList(),
+                            param.getSeihinCodeList(),
+                            param.getSeihinMeiList(),
+                            param.getKeywordList()
+                    );
+
+            List<SettingDataDtoImpl> settingDataList = getSettingDataList(screenId);
+            Set<String> settingDataKeys = settingDataList.stream()
+                    .map(SettingDataDtos::getColumnDisplayName)
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
+
+            for (Map<String, Object> map : dataMap) {
+                Map<String, Object> resultMap = new LinkedHashMap<>();
+                for (String key : settingDataKeys) {
+                    if (map.containsKey(key)) {
+                        resultMap.put(key, map.get(key));
+                    }
+                }
+                if (!resultMap.isEmpty()) {
+                    resultList.add(resultMap);
+                }
+            }
 
             if (CollectionUtils.isEmpty(resultList)) {
                 responseData.setMessage(messageSource.getMessage(MessageCode.NOT_EXISTS, null, locale));
@@ -114,11 +138,9 @@ public class ShukkaHeaderServiceImpl implements GenericService{
         return responseData;
     }
 
-
-
-    @Override
     @Transactional(rollbackFor = {CommonException.class , Exception.class})
-    public ShukkaDto save(ShukkaDto shukkaDto, Locale locale) throws CommonException, ExecutionException, InterruptedException {
+    public ApiResponse<Object> createdShukka(ShukkaDto shukkaDto, Locale locale) throws CommonException, ExecutionException, InterruptedException {
+        ApiResponse<Object> response = new ApiResponse<>();
         ShukkaDto createdShukka = new ShukkaDto();
         try {
 
@@ -188,12 +210,16 @@ public class ShukkaHeaderServiceImpl implements GenericService{
                 ShukkaHeader shukkaHeader = ShukkaHeader.builder()
                         .shukkaHeaderId(shukkaDto.getShukkaHeader().getShukkaHeaderId())
                         .shukkaNo(shukkaDto.getShukkaHeader().getShukkaNo())
-                        .shukkaYoteibi(shukkaDto.getShukkaHeader().getShukkaYoteibi())
+                        .shukkaYoteibi(shukkaDto.getShukkaHeader().getShukkaYoteibi().replace("-", ""))
                         .shukkaJisseikiBi(null)
                         .shukkaUmiFlg(0)
-                        .jyuchubi(shukkaDto.getShukkaHeader().getJyuchubi())
+                        .jyuchubi(shukkaDto.getShukkaHeader().getJyuchubi().replace("-", ""))
                         .nouhinsakiId(shukkaDto.getShukkaHeader().getNouhinsakiId())
                         .tantoshaId(shukkaDto.getShukkaHeader().getTantoshaId())
+                        .shukkaKubun(shukkaDto.getShukkaHeader().getShukkaKubun())
+                        .kenmei(shukkaDto.getShukkaHeader().getKenmei())
+                        .zeitansu(shukkaDto.getShukkaHeader().getZeitansu())
+                        .comment(shukkaDto.getShukkaHeader().getComment())
                         .tekiyoHeader(shukkaDto.getShukkaHeader().getTekiyoHeader())
                         .createdAt(currentTime)
                         .updatedAt(currentTime)
@@ -212,6 +238,8 @@ public class ShukkaHeaderServiceImpl implements GenericService{
                                 .seihinId(sm.getSeihinId())
                                 .soukoId(sm.getSoukoId())
                                 .tanabanId(sm.getTanabanId())
+                                .tanka(sm.getTanka())
+                                .kingaku(sm.getKingaku())
                                 .tekiyoMesai(sm.getTekiyoMesai())
                                 .createdAt(currentTime)
                                 .updatedAt(currentTime)
@@ -224,6 +252,11 @@ public class ShukkaHeaderServiceImpl implements GenericService{
                         .shukkaHeader(shukkaHeader)
                         .shukkaMesaiList(createdShukkaMesaiList)
                         .build();
+                if (!Objects.isNull(createdShukka)) {
+                    response.setStatus(ResponseStatusConst.SUCCESS);
+                    response.setMessage(null);
+                    response.setData(createdShukka);
+                }
             }
 
         } catch (CommonException e) {
@@ -236,7 +269,7 @@ public class ShukkaHeaderServiceImpl implements GenericService{
             );
         }
 
-        return createdShukka;
+        return response;
     }
 
 

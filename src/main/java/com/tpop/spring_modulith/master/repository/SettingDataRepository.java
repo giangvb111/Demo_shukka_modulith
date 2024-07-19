@@ -14,7 +14,7 @@ import java.util.Map;
 public interface SettingDataRepository extends JpaRepository<SettingGeneralData, Long> {
 
     @Query(nativeQuery = true , value = "SELECT g.* " +
-            " FROM SETTING_GENERAL_DATA g where g.SCREEN_ID = :screenId ORDER BY g.COLUMN_ORDER")
+            " FROM SETTING_GENERAL_DATA g where g.SCREEN_ID = :screenId AND g.STATUS = 1 ORDER BY g.COLUMN_ORDER")
     List<SettingDataDtos> getListSettingData(Integer screenId);
 
     @Query(nativeQuery = true , value = "SELECT COLUMN_NAME \n" +

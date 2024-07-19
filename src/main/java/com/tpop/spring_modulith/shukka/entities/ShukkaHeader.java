@@ -45,14 +45,27 @@ public class ShukkaHeader extends BaseEntity {
     @Column(name = "SHUKKA_UMI_FLG")
     private Integer shukkaUmiFlg;
 
+    @Column(name = "SHUKKA_KUBUN")
+    private String shukkaKubun;
+
+    @Column(name = "ZEITANSU")
+    private String zeitansu;
+
+    @Column(name = "KENMEI")
+    private String kenmei;
+
+    @Column(name = "COMMENT")
+    private String comment;
+
     public ShukkaHeader() {
         super();
     }
 
     @Builder
+
     public ShukkaHeader(LocalDateTime createdAt, LocalDateTime updatedAt, int deletedFlg,
-                        Long shukkaHeaderId, String shukkaNo, String jyuchubi, String shukkaYoteibi,String shukkaJisseikiBi ,
-                        Long nouhinsakiId, String tekiyoHeader, Long tantoshaId, Integer shukkaUmiFlg) {
+                        Long shukkaHeaderId, String shukkaNo, String jyuchubi, String shukkaYoteibi, String shukkaJisseikiBi,
+                        Long nouhinsakiId, String tekiyoHeader, Long tantoshaId, Integer shukkaUmiFlg, String shukkaKubun, String zeitansu, String kenmei, String comment) {
         super(createdAt, updatedAt, deletedFlg);
         this.shukkaHeaderId = shukkaHeaderId;
         this.shukkaNo = shukkaNo;
@@ -63,5 +76,9 @@ public class ShukkaHeader extends BaseEntity {
         this.tekiyoHeader = tekiyoHeader;
         this.tantoshaId = tantoshaId;
         this.shukkaUmiFlg = shukkaUmiFlg;
+        this.shukkaKubun = shukkaKubun;
+        this.zeitansu = zeitansu;
+        this.kenmei = kenmei;
+        this.comment = comment;
     }
 }

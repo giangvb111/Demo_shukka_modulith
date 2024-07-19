@@ -1,13 +1,14 @@
 package com.tpop.spring_modulith.master.service;
 
+import com.tpop.spring_modulith.component.ApiResponse;
 import com.tpop.spring_modulith.constant.MessageCode;
+import com.tpop.spring_modulith.constant.ResponseStatusConst;
 import com.tpop.spring_modulith.event.Event;
 import com.tpop.spring_modulith.exception.CommonException;
 import com.tpop.spring_modulith.master.dto.SettingDataDtoImpl;
 import com.tpop.spring_modulith.master.dto.SettingDataDtos;
 import com.tpop.spring_modulith.master.entities.SettingGeneralData;
 import com.tpop.spring_modulith.master.repository.SettingDataRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -42,7 +42,25 @@ public class SettingDataService implements GenericService<SettingGeneralData>{
      * @param screenId
      * @return
      */
-    public List<SettingDataDtoImpl> getSettingDataByScreenId(Integer screenId) {
+    public ApiResponse<Object> getSettingDataByScreenId(Integer screenId , Locale locale) {
+        ApiResponse<Object> response = new ApiResponse<>();
+        List<SettingDataDtoImpl> resultList = getSettingData(screenId);
+        if (CollectionUtils.isEmpty(resultList)) {
+            response.setMessage(messageSource.getMessage(MessageCode.NOT_EXISTS, null, locale));
+        } else {
+            response.setMessage(null);
+        }
+        response.setStatus(ResponseStatusConst.SUCCESS);
+        response.setData(resultList);
+        return response;
+    }
+
+    /**
+     *
+     * @param screenId
+     * @return
+     */
+    public List<SettingDataDtoImpl> getSettingData(Integer screenId) {
         List<SettingDataDtoImpl> resultList = new ArrayList<>();
         if (!Objects.isNull(screenId)) {
             List<SettingDataDtos> settingDataDtoList = settingDataRepository.getListSettingData(screenId);
@@ -75,6 +93,17 @@ public class SettingDataService implements GenericService<SettingGeneralData>{
         Integer screenId  = getScreenIdByScreenCode(screenCode);
         if (!Objects.isNull(screenId)) {
             event.getObjectCompletableFuture().complete(screenId);
+        } else {
+            event.getObjectCompletableFuture().complete(null);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void handleEventTypeSettingData(Event<?> event) {
+        Integer screenId  = (Integer) event.getData();
+        List<SettingDataDtoImpl> resultList = getSettingData(screenId);
+        if (!Objects.isNull(resultList)) {
+            event.getObjectCompletableFuture().complete(resultList);
         } else {
             event.getObjectCompletableFuture().complete(null);
         }
@@ -115,7 +144,7 @@ public class SettingDataService implements GenericService<SettingGeneralData>{
                         .toList();
 
                 settingDataRepository.saveAllAndFlush(list);
-                createSettingListGeneralData = modelMapper.map(getSettingDataByScreenId(screenId), new TypeToken<List<SettingGeneralData>>(){}.getType());
+                createSettingListGeneralData = modelMapper.map(getSettingDataByScreenId(screenId ,locale), new TypeToken<List<SettingGeneralData>>(){}.getType());
             }
         } catch (Exception e) {
             throw new CommonException(
@@ -170,7 +199,7 @@ public class SettingDataService implements GenericService<SettingGeneralData>{
 
                  settingDataRepository.saveAll(list);
 
-                 updateSettingListGeneralData = modelMapper.map(getSettingDataByScreenId(screenId), new TypeToken<List<SettingGeneralData>>(){}.getType());
+                 updateSettingListGeneralData = modelMapper.map(getSettingDataByScreenId(screenId , locale), new TypeToken<List<SettingGeneralData>>(){}.getType());
             }
         } catch (Exception e) {
             throw new CommonException(

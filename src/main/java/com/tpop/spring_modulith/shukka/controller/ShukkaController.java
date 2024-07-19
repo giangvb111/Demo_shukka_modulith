@@ -23,13 +23,13 @@ public class ShukkaController {
     private final ShukkaHeaderServiceImpl shukkaHeaderService;
 
     @PostMapping(value = "/create")
-    public ResponseEntity<ShukkaDto> createShukka(@RequestBody ShukkaDto shukkaDto , Locale locale) throws CommonException, ExecutionException, InterruptedException {
-        return ResponseEntity.ok(shukkaHeaderService.save(shukkaDto ,locale));
+    public ResponseEntity<ApiResponse<Object>> createShukka(@RequestBody ShukkaDto shukkaDto , Locale locale) throws CommonException, ExecutionException, InterruptedException {
+        return ResponseEntity.ok(shukkaHeaderService.createdShukka(shukkaDto ,locale));
     }
 
     @PostMapping(value = "/get-list")
-    public ResponseEntity<ApiResponse<Object>> getListShukka(@RequestBody ShukkaSearchDto param, Locale locale) throws CommonException {
-        return ResponseEntity.ok(shukkaHeaderService.getAllShukkaList(param, locale));
+    public ResponseEntity<ApiResponse<Object>> getListShukka(@RequestBody ShukkaSearchDto params, Locale locale) throws CommonException {
+        return ResponseEntity.ok(shukkaHeaderService.getAllShukkaList(params, locale));
     }
 
 }

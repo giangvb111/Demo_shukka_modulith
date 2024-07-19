@@ -49,6 +49,9 @@ public class ShukkaMesai extends BaseEntity {
     @Column(name = "TANKA")
     private Integer tanka;
 
+    @Column(name = "KINGAKU")
+    private Integer kingaku;
+
     @Column(name = "TEKIYO_MESAI")
     private String tekiyoMesai;
 
@@ -57,9 +60,10 @@ public class ShukkaMesai extends BaseEntity {
     }
 
     @Builder
+
     public ShukkaMesai(LocalDateTime createdAt, LocalDateTime updatedAt, int deletedFlg,
                        Long shukkaMesaiId, String shukkaMesaiNo, BigDecimal shukkaYoteiSuryo, BigDecimal shukkaJisseikiSuryo,
-                       Long shukkaHeaderId, Long seihinId, Long soukoId, Long tanabanId, String lotNo, Integer tanka, String tekiyoMesai) {
+                       Long shukkaHeaderId, Long seihinId, Long soukoId, Long tanabanId, String lotNo, Integer tanka, Integer kingaku, String tekiyoMesai) {
         super(createdAt, updatedAt, deletedFlg);
         this.shukkaMesaiId = shukkaMesaiId;
         this.shukkaMesaiNo = shukkaMesaiNo;
@@ -71,6 +75,7 @@ public class ShukkaMesai extends BaseEntity {
         this.tanabanId = tanabanId;
         this.lotNo = lotNo;
         this.tanka = tanka;
+        this.kingaku = kingaku;
         this.tekiyoMesai = tekiyoMesai;
     }
 }

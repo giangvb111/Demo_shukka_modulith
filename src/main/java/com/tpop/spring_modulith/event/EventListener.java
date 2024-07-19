@@ -26,6 +26,7 @@ public class EventListener implements ApplicationListener<Event<?>> {
             case TYPE_SOUKO -> soukoService.handEventSouko(event);
             case TYPE_TANTOSHA -> tantoshaService.handleEventTantosha(event);
             case TYPE_SCREENID -> settingDataService.handleEventSettingData(event);
+            case TYPE_SETTINGDATA -> settingDataService.handleEventTypeSettingData(event);
             default -> logger.error("Unhandled event type: {}", event.getEventType());
         }
     }
