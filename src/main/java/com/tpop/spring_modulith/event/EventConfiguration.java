@@ -16,14 +16,6 @@ public class EventConfiguration<T>  extends ApplicationEvent {
     private T data;
     private CompletableFuture<Map<String , Object>> future;
 
-    public EventConfiguration(Object source) {
-        super(source);
-    }
-
-    public EventConfiguration(Object source, Clock clock) {
-        super(source, clock);
-    }
-
     public EventConfiguration(Object source, EventType eventType , T data , CompletableFuture<Map<String , Object>> future) {
         super(source);
         this.eventType = eventType;

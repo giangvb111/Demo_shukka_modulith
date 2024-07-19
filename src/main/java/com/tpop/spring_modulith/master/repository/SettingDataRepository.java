@@ -22,17 +22,8 @@ public interface SettingDataRepository extends JpaRepository<SettingGeneralData,
             "WHERE TABLE_NAME = :tableName")
     List<String> listColumnName(@Param("tableName") String tableName);
 
-    @Query(nativeQuery = true , value = "SELECT sd.* FROM setting_data sd WHERE sd.id IN :settingIdList")
-    List<SettingGeneralData> findSettingDataByIds(List<Long> settingIdList);
-
-    @Query(nativeQuery = true , value = "select gts.table_name from general_table_setting gts where gts.screen_id  = :screenId")
+    @Query(nativeQuery = true , value = "select gts.table_name from SETTING_GENERAL_DATA gts where gts.SCREEN_ID  = :screenId")
     List<String> listTableName (Integer screenId);
-
-    @Query(nativeQuery = true , value = "select gms.reference_screen_id ,gms.reference_screen_name from general_system_master gms where gms.screen_id  = :screenId")
-    List<Map<String , Integer>> screenOptionList (Integer screenId);
-
-    @Query(nativeQuery = true , value = "select m.screen_id from menu m where m.url = :url ")
-    Integer getScreenIdByUrl(@Param("url") String url);
 
     @Query(nativeQuery = true , value = "SELECT SCREEN_ID FROM MENU WHERE SCREEN_CODE =:screenCode")
     Integer getScreenIdByScreenCode(@Param("screenCode") String screenCode);

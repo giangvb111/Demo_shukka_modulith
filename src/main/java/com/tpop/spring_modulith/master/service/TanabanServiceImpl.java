@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TanabanServiceImpl implements GenericService<TanabanMaster>{
 
     private final TanabanRepository tanabanRepository;
-    private final SoukoServiceImpl soukoService;
     private final MessageSource messageSource;
 
     @Override
@@ -33,6 +32,12 @@ public class TanabanServiceImpl implements GenericService<TanabanMaster>{
         return null;
     }
 
+    /**
+     * @param tanabanMasterList
+     * @param locale
+     * @return 登録した棚番リスト
+     * @throws CommonException
+     */
     @Override
     public List<TanabanMaster> save(List<TanabanMaster> tanabanMasterList, Locale locale) throws CommonException {
         List<TanabanMaster> createTanabanList = new ArrayList<>();
@@ -107,6 +112,12 @@ public class TanabanServiceImpl implements GenericService<TanabanMaster>{
         return Optional.empty();
     }
 
+    /**
+     *
+     *
+     * @param soukoId
+     * @return 倉庫IDによる棚番リストを取得
+     */
     public List<TanabanMaster> getTanabanListBySoukoId(@NonNull Long soukoId) {
         return tanabanRepository.getTanabanListBySoukoId(soukoId);
     }

@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ShukkaHeaderServiceImpl implements GenericService{
+public class ShukkaHeaderServiceImpl implements GenericService {
 
     private final ShukkaHeaderRepository shukkaHeaderRepository;
 
@@ -47,13 +47,13 @@ public class ShukkaHeaderServiceImpl implements GenericService{
         Integer screenId = null;
         future = eventPublisher.publishCustomEvent(EventType.TYPE_SCREENID, null, ScreenCodeConstant.SHUKKA_ICHIRAN);
         if (!Objects.isNull(future.get())) {
-                screenId = (Integer) future.get();
+            screenId = (Integer) future.get();
         }
         return screenId;
     }
 
     @Override
-    public Page<ShukkaDto> getShukkaList(Pageable pageable , Locale locale) throws CommonException {
+    public Page<ShukkaDto> getShukkaList(Pageable pageable, Locale locale) throws CommonException {
         return null;
     }
 
@@ -74,7 +74,6 @@ public class ShukkaHeaderServiceImpl implements GenericService{
     }
 
     /**
-     *
      * @param param
      * @param locale
      * @return
@@ -138,7 +137,15 @@ public class ShukkaHeaderServiceImpl implements GenericService{
         return responseData;
     }
 
-    @Transactional(rollbackFor = {CommonException.class , Exception.class})
+    /**
+     * @param shukkaDto
+     * @param locale
+     * @return
+     * @throws CommonException
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
+    @Transactional(rollbackFor = {CommonException.class, Exception.class})
     public ApiResponse<Object> createdShukka(ShukkaDto shukkaDto, Locale locale) throws CommonException, ExecutionException, InterruptedException {
         ApiResponse<Object> response = new ApiResponse<>();
         ShukkaDto createdShukka = new ShukkaDto();
@@ -272,8 +279,7 @@ public class ShukkaHeaderServiceImpl implements GenericService{
         return response;
     }
 
-
-        @Override
+    @Override
     public Optional<ShukkaDto> findById(Long id) {
         return Optional.empty();
     }

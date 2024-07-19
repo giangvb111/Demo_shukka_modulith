@@ -34,6 +34,12 @@ public class SeihinServiceImpl implements GenericService<SeihinMaster>{
         return seihinRepository.findAll();
     }
 
+    /**
+     * @param seihinMasterList
+     * @param locale
+     * @return　 登録した製品リスト
+     * @throws CommonException
+     */
     @Override
     public List<SeihinMaster> save(List<SeihinMaster> seihinMasterList, Locale locale) throws CommonException {
         List<SeihinMaster> createSeihinList = new ArrayList<>();
@@ -113,9 +119,12 @@ public class SeihinServiceImpl implements GenericService<SeihinMaster>{
 
     @Override
     public void deleteById(Long id) {
-
     }
 
+    /**
+     * @param event
+     * 製品のイベント処理
+     */
     @SuppressWarnings("unchecked")
     public void handEventSeihin(Event<?> event) {
 

@@ -5,58 +5,38 @@ import com.tpop.spring_modulith.event.EventPublisher;
 import com.tpop.spring_modulith.event.EventType;
 import com.tpop.spring_modulith.exception.APIErrorDetail;
 import com.tpop.spring_modulith.exception.CommonException;
-import com.tpop.spring_modulith.shukka.dto.ShukkaDto;
 import com.tpop.spring_modulith.shukka.entities.ShukkaMesai;
 import com.tpop.spring_modulith.shukka.repository.ShukkaMesaiRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
 @RequiredArgsConstructor
-public class ShukkaMesaiServiceImpl implements GenericService{
+public class ShukkaMesaiServiceImpl{
 
     private final ShukkaMesaiRepository shukkaMesaiRepository;
     private final EventPublisher eventPublisher;
     private final MessageSource messageSource;
 
-    @Override
-    public Page<ShukkaDto> getShukkaList(Pageable pageable , Locale locale) throws CommonException {
-        return null;
-    }
-
-    @Override
-    public ShukkaDto save(ShukkaDto shukkaDto, Locale locale) throws CommonException {
-        return null;
-    }
-
     public List<ShukkaMesai> createShukkaMesai(List<ShukkaMesai> shukkaMesaiList) throws CommonException{
         return shukkaMesaiRepository.saveAll(shukkaMesaiList);
-    }
-
-    @Override
-    public Optional<ShukkaDto> findById(Long id) {
-        return Optional.empty();
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
     }
 
     /**
      *
      * @param shukkaMesaiList
      * @param locale
-     * @return
+     * @return エラーリスト取得
      * @throws ExecutionException
      * @throws InterruptedException
      */

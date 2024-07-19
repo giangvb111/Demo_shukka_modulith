@@ -35,6 +35,13 @@ public class SoukoServiceImpl implements GenericService<SoukoMaster>{
         return soukoRepository.findAll();
     }
 
+    /**
+     *
+     * @param soukoMasterList
+     * @param locale
+     * @return 登録した倉庫リスト
+     * @throws CommonException
+     */
     @Override
     public List<SoukoMaster> save(List<SoukoMaster> soukoMasterList, Locale locale) throws CommonException {
         List<SoukoMaster> createSoukoList = new ArrayList<>();
@@ -102,6 +109,12 @@ public class SoukoServiceImpl implements GenericService<SoukoMaster>{
     public void deleteById(Long id) {
 
     }
+
+    /**
+     *
+     * ハンドイベント倉庫
+     * @param event
+     */
 
     @SuppressWarnings("unchecked")
     public void handEventSouko(Event<?> event) {

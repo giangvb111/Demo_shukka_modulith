@@ -33,6 +33,11 @@ public class NouhinsakiServiceImpl implements GenericService<NouhinsakiMaster>{
         return null;
     }
 
+    /**
+     * @param locale
+     * @return 納品先リスト
+     * @throws CommonException
+     */
     public ApiResponse<Object> getNouhisakiList(Locale locale) throws CommonException {
         ApiResponse<Object> response = new ApiResponse<>();
         List<NouhinsakiMaster> resultList;
@@ -57,6 +62,12 @@ public class NouhinsakiServiceImpl implements GenericService<NouhinsakiMaster>{
         return response;
     }
 
+    /**
+     * @param nouhinsakiMasterList
+     * @param locale
+     * @return 登録した納品先リスト
+     * @throws CommonException
+     */
     @Override
     public List<NouhinsakiMaster> save(List<NouhinsakiMaster> nouhinsakiMasterList, Locale locale) throws CommonException {
 
@@ -132,11 +143,14 @@ public class NouhinsakiServiceImpl implements GenericService<NouhinsakiMaster>{
     public Optional<NouhinsakiMaster> findById(Long id) {
         return nouhisakiRepository.findById(id);
     }
-
     @Override
     public void deleteById(Long id) {
     }
 
+    /**
+     * @param event
+     * 納品先のイベント処理
+     */
     @SuppressWarnings("unchecked")
     public void handEventNouhinsaki(Event<?> event) {
 

@@ -35,6 +35,12 @@ public class TantoshaServiceImpl implements GenericService<Tantosha>{
         return null;
     }
 
+    /**
+     *
+     * @param taishokuFlg
+     * @param locale
+     * @return  退職フラグによる担当者リストを取得
+     */
     public ApiResponse<Object> getTantoshaListByTaishokuFlg(Integer taishokuFlg, Locale locale) {
         ApiResponse<Object> response = new ApiResponse<>();
         List<Tantosha> tantoshaList = tantoshaRepository.findTantoshaByTaishokuFlg(taishokuFlg);
@@ -48,6 +54,13 @@ public class TantoshaServiceImpl implements GenericService<Tantosha>{
         return response;
     }
 
+    /**
+     *
+     * @param tantoshaList
+     * @param locale
+     * @return  登録した担当者リストを取得
+     * @throws CommonException
+     */
     @Override
     public List<Tantosha> save(List<Tantosha> tantoshaList, Locale locale) throws CommonException {
         List<Tantosha> createTantoshaList = new ArrayList<>();
@@ -107,6 +120,10 @@ public class TantoshaServiceImpl implements GenericService<Tantosha>{
         return createTantoshaList;
     }
 
+    /**
+     * @param event
+     * ハンドルイベントタントーシャ
+     */
     @SuppressWarnings("unchecked")
     public void handleEventTantosha(Event<?> event) {
 
